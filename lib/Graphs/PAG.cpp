@@ -779,7 +779,7 @@ struct DOTGraphTraits<PAG*> : public DefaultDOTGraphTraits
     /// Either you can choose to display the name of the value or the whole instruction
     static std::string getNodeLabel(PAGNode *node, PAG *graph)
     {
-        bool briefDisplay = true;
+        bool briefDisplay = false;
         bool nameDisplay = true;
         std::string str;
         raw_string_ostream rawstr(str);
