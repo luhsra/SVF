@@ -101,8 +101,7 @@ void FlowSensitive::analyze()
  */
 void FlowSensitive::finalize()
 {
-	if(svfg->getDumpVFG())
-		svfg->dump("fs_solved", true);
+    svfg->dump("fs_solved", false);
 
     NodeStack& nodeStack = WPASolver<SVFG*>::SCCDetect();
     while (nodeStack.empty() == false)

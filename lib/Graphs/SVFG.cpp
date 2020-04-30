@@ -704,7 +704,7 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
 
     std::string getNodeLabel(NodeType *node, SVFG *graph)
     {
-        if (isSimple())
+        if (false && isSimple())
             return getSimpleNodeLabel(node, graph);
         else
             return getCompleteNodeLabel(node, graph);
@@ -815,11 +815,21 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
         {
             NodeID src = stmtNode->getPAGSrcNodeID();
             NodeID dst = stmtNode->getPAGDstNodeID();
+			PAGNode* s = stmtNode->getPAGSrcNode();
+			PAGNode* d = stmtNode->getPAGDstNode();
             rawstr << dst << "<--" << src << "\n";
             rawstr << stmtNode->getPAGDstNode()->getValueName()
                    << "<--"
                    << stmtNode->getPAGSrcNode()->getValueName()
                    << "\n";
+            rawstr << "--- PAGNodes ---\n";
+            if (s->hasValue()) {
+            	rawstr << "src: " << *s->getValue() << "\n";
+            }
+            if (d->hasValue()) {
+            	rawstr << "dst: " << *d->getValue() << "\n";
+            }
+            rawstr << "--- /PAGNodes ---\n";
             if(stmtNode->getInst())
             {
                 std::string str;
