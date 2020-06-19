@@ -52,6 +52,6 @@ INSTALL(
     FILES_MATCHING
     PATTERN "**/*.h"
     )
-enable_testing()
-add_subdirectory(Test-Suite)
-include(CTest)
+#enable_testing()
+#add_subdirectory(Test-Suite)
+#include(CTest)
