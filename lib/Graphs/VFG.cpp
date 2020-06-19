@@ -843,25 +843,49 @@ void VFG::connectCallerAndCallee(const CallBlockNode* callBlockNode, const SVFFu
  */
 const PAGNode* VFG::getLHSTopLevPtr(const VFGNode* node) const
 {
-
+    // NodeK 0:Addr
     if(const AddrVFGNode* addr = SVFUtil::dyn_cast<AddrVFGNode>(node))
         return addr->getPAGDstNode();
+    // NodeK 1:Copy
     else if(const CopyVFGNode* copy = SVFUtil::dyn_cast<CopyVFGNode>(node))
         return copy->getPAGDstNode();
+    // NodeK 2:Gep
     else if(const GepVFGNode* gep = SVFUtil::dyn_cast<GepVFGNode>(node))
         return gep->getPAGDstNode();
+    // NodeK 3:Store
+    else if(const StoreVFGNode* store = SVFUtil::dyn_cast<StoreVFGNode>(node))
+        return store->getPAGDstNode();
+    // NodeK 4:Load
     else if(const LoadVFGNode* load = SVFUtil::dyn_cast<LoadVFGNode>(node))
         return load->getPAGDstNode();
+    // NodeK 5:Cmp
+    else if(const CmpVFGNode* cmp = SVFUtil::dyn_cast<CmpVFGNode>(node))
+        return cmp->getRes();
+    // NodeK 6:BinaryOp
+    else if(const BinaryOPVFGNode* bop = SVFUtil::dyn_cast<BinaryOPVFGNode>(node))
+        return bop->getRes();
+    // NodeK 7:TPhi
     else if(const PHIVFGNode* phi = SVFUtil::dyn_cast<PHIVFGNode>(node))
         return phi->getRes();
-    else if(const ActualParmVFGNode* ap = SVFUtil::dyn_cast<ActualParmVFGNode>(node))
-        return ap->getParam();
-    else if(const FormalParmVFGNode*fp = SVFUtil::dyn_cast<FormalParmVFGNode>(node))
-        return fp->getParam();
-    else if(const ActualRetVFGNode* ar = SVFUtil::dyn_cast<ActualRetVFGNode>(node))
-        return ar->getRev();
+    // NodeK 8:TIntraPhi
+    else if(const IntraPHIVFGNode* iaphi = SVFUtil::dyn_cast<IntraPHIVFGNode>(node))
+        return iaphi->getRes();
+    // NodeK 9:TInterPhi
+    else if(const InterPHIVFGNode* irphi = SVFUtil::dyn_cast<InterPHIVFGNode>(node))
+        return irphi->getRes();
+    // NodeK 13:FRet
     else if(const FormalRetVFGNode* fr = SVFUtil::dyn_cast<FormalRetVFGNode>(node))
         return fr->getRet();
+    // NodeK 14:ARet
+    else if(const ActualRetVFGNode* ar = SVFUtil::dyn_cast<ActualRetVFGNode>(node))
+        return ar->getRev();
+    // NodeK 15:AParm
+    else if(const ActualParmVFGNode* ap = SVFUtil::dyn_cast<ActualParmVFGNode>(node))
+        return ap->getParam();
+    // NodeK 16:FParm
+    else if(const FormalParmVFGNode* fp = SVFUtil::dyn_cast<FormalParmVFGNode>(node))
+        return fp->getParam();
+    // NodeK 22:NPtr
     else if(const NullPtrVFGNode* nullVFG = SVFUtil::dyn_cast<NullPtrVFGNode>(node))
         return nullVFG->getPAGNode();
     else
