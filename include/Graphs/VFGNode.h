@@ -579,7 +579,7 @@ public:
 
     /// Methods for support type inquiry through isa, cast, and dyn_cast:
     //@{
-    static inline bool classof(const IntraPHIVFGNode *node)
+    static inline bool classof(const IntraPHIVFGNode*)
     {
         return true;
     }
@@ -889,7 +889,7 @@ public:
     }
     ///Methods for support type inquiry through isa, cast, and dyn_cast:
     //@{
-    static inline bool classof(const FormalRetVFGNode *)
+    static inline bool classof(const FormalRetVFGNode )
     {
         return true;
     }
@@ -944,7 +944,7 @@ public:
 
     /// Methods for support type inquiry through isa, cast, and dyn_cast:
     //@{
-    static inline bool classof(const InterPHIVFGNode *node)
+    static inline bool classof(const InterPHIVFGNode*)
     {
         return true;
     }

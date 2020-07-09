@@ -227,7 +227,7 @@ public:
     virtual void analyze(SVFModule* svfModule) = 0;
 
     /// Compute points-to results on-demand, overridden by derived classes
-    virtual void computeDDAPts(NodeID id) {}
+    virtual void computeDDAPts(NodeID) {}
 
     /// Interface exposed to users of our pointer analysis, given Location infos
     virtual AliasResult alias(const MemoryLocation &LocA,
