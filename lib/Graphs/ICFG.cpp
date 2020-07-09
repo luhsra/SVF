@@ -470,6 +470,14 @@ struct DOTGraphTraits<ICFG*> : public DOTGraphTraits<PAG*>
         {
             rawstr <<  "color=purple";
         }
+        else if(SVFUtil::isa<InterBlockNode>(node))
+        {
+            rawstr <<  "color=orange";
+        }
+        else if(SVFUtil::isa<ICFGNode>(node))
+        {
+            rawstr <<  "color=gray";
+        }
         else
             assert(false && "no such kind of node!!");
 
