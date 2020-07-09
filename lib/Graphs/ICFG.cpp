@@ -247,7 +247,7 @@ ICFGEdge* ICFG::addRetEdge(ICFGNode* srcNode, ICFGNode* dstNode, CallSite cs)
  */
 void ICFG::dump(const std::string& file, bool simple)
 {
-    if(DumpICFG)
+    //if(DumpICFG)
         GraphPrinter::WriteGraphToFile(outs(), file, this, simple);
 }
 
@@ -376,6 +376,18 @@ struct DOTGraphTraits<ICFG*> : public DOTGraphTraits<PAG*>
         else if(SVFUtil::isa<RetBlockNode>(node))
         {
             rawstr <<  "color=blue";
+        }
+        else if(SVFUtil::isa<GlobalBlockNode>(node))
+        {
+            rawstr <<  "color=orange";
+        }
+        else if(SVFUtil::isa<InterBlockNode>(node))
+        {
+            rawstr <<  "color=pink";
+        }
+        else if(SVFUtil::isa<ICFGNode>(node))
+        {
+            rawstr <<  "color=gray";
         }
         else
             assert(false && "no such kind of node!!");
