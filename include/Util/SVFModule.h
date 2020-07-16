@@ -31,6 +31,7 @@
 #define SVFMODULE_H_
 
 #include "Util/BasicTypes.h"
+#include <iostream>
 
 class SVFModule
 {
@@ -87,8 +88,16 @@ public:
     ///@{
     inline void addFunctionSet(Function* fun)
     {
+        std::cout << "ADD Function " << fun->getName().str() << std::endl;
+        assert(fun && "FUN is null");
         SVFFunction* svfFunc = new SVFFunction(fun);
+        std::cout << "New SVFFunction " << svfFunc->getLLVMFun()->getName().str() << std::endl;
         FunctionSet.push_back(svfFunc);
+        std::cout << "All Function:";
+        for (const auto fun : FunctionSet) {
+            std::cout << " " << fun->getLLVMFun()->getName().str();
+        }
+        std::cout << std::endl;
         LLVMFunctionSet.push_back(fun);
         LLVMFunc2SVFFunc[fun] = svfFunc;
     }

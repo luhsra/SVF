@@ -42,6 +42,8 @@ void ICFGBuilder::build(SVFModule* svfModule)
     for (SVFModule::const_iterator iter = svfModule->begin(), eiter = svfModule->end(); iter != eiter; ++iter)
     {
         const SVFFunction *fun = *iter;
+		llvm::errs() << fun->getName() << "\n";
+		fun->getLLVMFun();
         if (SVFUtil::isExtCall(fun))
             continue;
         WorkList worklist;

@@ -232,6 +232,7 @@ public:
     SVFFunction(Function* f): SVFValue(f->getName(),SVFValue::SVFFunc),
         isDecl(f->isDeclaration()), isIntri(f->isIntrinsic()), fun(f)
     {
+        assert(f && "Function is null");
     }
     inline Function* getLLVMFun() const
     {
