@@ -737,6 +737,12 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
                     it != eit; it++)
                 rawstr << it->second->getId() << ", ";
             rawstr << ")\n";
+			rawstr << "----- PAGNODE in ------\n";
+            for(PHISVFGNode::OPVers::const_iterator it = tphi->opVerBegin(), eit = tphi->opVerEnd();
+                    it != eit; it++)
+                rawstr << *it->second << ", ";
+			rawstr << "----- /PAGNODE in ------\n";
+			rawstr << "Result: " << tphi->getRes() << "\n";
             rawstr << getSourceLoc(tphi->getRes()->getValue());
         }
         else if(FormalParmSVFGNode* fp = SVFUtil::dyn_cast<FormalParmSVFGNode>(node))
@@ -822,6 +828,7 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
             NodeID dst = stmtNode->getPAGDstNodeID();
 			PAGNode* s = stmtNode->getPAGSrcNode();
 			PAGNode* d = stmtNode->getPAGDstNode();
+            rawstr << "StmtSVFGNode\n";
             rawstr << dst << "<--" << src << "\n";
             rawstr << stmtNode->getPAGDstNode()->getValueName()
                    << "<--"
@@ -854,6 +861,7 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
         }
         else if(BinaryOPVFGNode* tphi = SVFUtil::dyn_cast<BinaryOPVFGNode>(node))
         {
+            rawstr << "BinaryOPVFGNode\n";
             rawstr << tphi->getRes()->getId() << " = Binary(";
             for(BinaryOPVFGNode::OPVers::const_iterator it = tphi->opVerBegin(), eit = tphi->opVerEnd();
                     it != eit; it++)
@@ -872,6 +880,7 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
         }
         else if(CmpVFGNode* tphi = SVFUtil::dyn_cast<CmpVFGNode>(node))
         {
+            rawstr << "CmpVFGNode\n";
             rawstr << tphi->getRes()->getId() << " = cmp(";
             for(CmpVFGNode::OPVers::const_iterator it = tphi->opVerBegin(), eit = tphi->opVerEnd();
                     it != eit; it++)
@@ -881,27 +890,42 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
         }
         else if(MSSAPHISVFGNode* mphi = SVFUtil::dyn_cast<MSSAPHISVFGNode>(node))
         {
+            rawstr << "MSSAPHISVFGNode\n";
             rawstr << "MR_" << mphi->getRes()->getMR()->getMRID()
-                   << "V_" << mphi->getRes()->getResVer()->getSSAVersion() << " = PHI(";
+                   << "V_" << mphi->getRes()->getResVer()->getSSAVersion() << " = MSSAPHI(";
             for (MemSSA::PHI::OPVers::const_iterator it = mphi->opVerBegin(), eit = mphi->opVerEnd();
                     it != eit; it++)
                 rawstr << "MR_" << it->second->getMR()->getMRID() << "V_" << it->second->getSSAVersion() << ", ";
             rawstr << ")\n";
+			rawstr << "----- PAGNODE in ------\n";
+            for(PHISVFGNode::OPVers::const_iterator it = tphi->opVerBegin(), eit = tphi->opVerEnd();
+                    it != eit; it++)
+                rawstr << *it->second << ", \n";
+			rawstr << "----- /PAGNODE in ------\n";
+			rawstr << "Result: " << *tphi->getRes() << "\n";
 
             rawstr << mphi->getRes()->getMR()->dumpStr() << "\n";
 //            rawstr << getSourceLoc(&mphi->getBB()->back());
         }
         else if(PHISVFGNode* tphi = SVFUtil::dyn_cast<PHISVFGNode>(node))
         {
+            rawstr << "PHISVFGNode\n";
             rawstr << tphi->getRes()->getId() << " = PHI(";
             for(PHISVFGNode::OPVers::const_iterator it = tphi->opVerBegin(), eit = tphi->opVerEnd();
                     it != eit; it++)
                 rawstr << it->second->getId() << ", ";
             rawstr << ")\n";
+			rawstr << "----- PAGNODE in ------\n";
+            for(PHISVFGNode::OPVers::const_iterator it = tphi->opVerBegin(), eit = tphi->opVerEnd();
+                    it != eit; it++)
+                rawstr << *it->second << ", \n";
+			rawstr << "----- /PAGNODE in ------\n";
+			rawstr << "Result: " << *tphi->getRes() << "\n";
             rawstr << getSourceLoc(tphi->getRes()->getValue());
         }
         else if(FormalINSVFGNode* fi = SVFUtil::dyn_cast<FormalINSVFGNode>(node))
         {
+            rawstr << "FormalINSVFGNode\n";
             rawstr	<< fi->getEntryChi()->getMR()->getMRID() << "V_" << fi->getEntryChi()->getResVer()->getSSAVersion() <<
                     " = ENCHI(MR_" << fi->getEntryChi()->getMR()->getMRID() << "V_" << fi->getEntryChi()->getOpVer()->getSSAVersion() << ")\n";
             rawstr << fi->getEntryChi()->getMR()->dumpStr() << "\n";
@@ -909,30 +933,36 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
         }
         else if(FormalOUTSVFGNode* fo = SVFUtil::dyn_cast<FormalOUTSVFGNode>(node))
         {
+            rawstr << "FormalOUTSVFGNode\n";
             rawstr << "RETMU(" << fo->getRetMU()->getMR()->getMRID() << "V_" << fo->getRetMU()->getVer()->getSSAVersion() << ")\n";
             rawstr  << fo->getRetMU()->getMR()->dumpStr() << "\n";
             rawstr << "Fun[" << fo->getFun()->getName() << "]";
         }
         else if(FormalParmSVFGNode* fp = SVFUtil::dyn_cast<FormalParmSVFGNode>(node))
         {
+            rawstr << "FormalParmSVFGNode\n";
             rawstr	<< "FPARM(" << fp->getParam()->getId() << ")\n";
             rawstr << "Fun[" << fp->getFun()->getName() << "]";
         }
         else if(ActualINSVFGNode* ai = SVFUtil::dyn_cast<ActualINSVFGNode>(node))
         {
+            rawstr << "ActualINSVFGNode\n";
             rawstr << "CSMU(" << ai->getCallMU()->getMR()->getMRID() << "V_" << ai->getCallMU()->getVer()->getSSAVersion() << ")\n";
             rawstr << ai->getCallMU()->getMR()->dumpStr() << "\n";
             rawstr << "CS[" << getSourceLoc(ai->getCallSite()->getCallSite()) << "]";
         }
         else if(ActualOUTSVFGNode* ao = SVFUtil::dyn_cast<ActualOUTSVFGNode>(node))
         {
+            rawstr << "ActualOUTSVFGNode\n";
             rawstr <<  ao->getCallCHI()->getMR()->getMRID() << "V_" << ao->getCallCHI()->getResVer()->getSSAVersion() <<
                    " = CSCHI(MR_" << ao->getCallCHI()->getMR()->getMRID() << "V_" << ao->getCallCHI()->getOpVer()->getSSAVersion() << ")\n";
             rawstr << ao->getCallCHI()->getMR()->dumpStr() << "\n";
+            rawstr << "CallSite: " << *ao->getCallSite() << "\n";
             rawstr << "CS[" << getSourceLoc(ao->getCallSite()->getCallSite()) << "]" ;
         }
         else if(ActualParmSVFGNode* ap = SVFUtil::dyn_cast<ActualParmSVFGNode>(node))
         {
+            rawstr << "ActualParmSVFGNode\n";
             rawstr << "APARM(" << ap->getParam()->getId() << ")\n" ;
             rawstr << "CS[" << getSourceLoc(ap->getCallSite()->getCallSite()) << "]";
         }
@@ -942,11 +972,13 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
         }
         else if (ActualRetSVFGNode* ar = SVFUtil::dyn_cast<ActualRetSVFGNode>(node))
         {
+            rawstr << "ActualRetSVFGNode\n";
             rawstr << "ARet(" << ar->getRev()->getId() << ")\n";
             rawstr << "CS[" << getSourceLoc(ar->getCallSite()->getCallSite()) << "]";
         }
         else if (FormalRetSVFGNode* fr = SVFUtil::dyn_cast<FormalRetSVFGNode>(node))
         {
+            rawstr << "FormalRetSVFGNode\n";
             rawstr << "FRet(" << fr->getRet()->getId() << ")\n";
             rawstr << "Fun[" << fr->getFun()->getName() << "]";
         }
