@@ -171,8 +171,14 @@ const std::string AddrPE::toString() const{
     std::string str;
     raw_string_ostream rawstr(str);
     rawstr << "AddrPE: [" << getDstID() << "<--" << getSrcID() << "]\t";
-    if(getValue())
-        rawstr << *getValue() << getSourceLoc(getValue());
+    if (auto val = getValue()) {
+        if (auto* func = llvm::dyn_cast<llvm::Function>(val)) {
+            rawstr << "Function: " << func->getName();
+        } else {
+            rawstr << *val;
+        }
+        rawstr << " " << getSourceLoc(getValue());
+    }
     return rawstr.str();
 }
 
