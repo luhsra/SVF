@@ -162,7 +162,13 @@ const std::string IntraPHIVFGNode::toString() const {
         rawstr << it->second->getId() << ", ";
     rawstr << ")]\t";
     if(res->hasValue()){
-        rawstr << " " << *res->getValue();
+        rawstr << " ";
+        auto val = res->getValue();
+        if (auto* func = llvm::dyn_cast<llvm::Function>(val)) {
+            rawstr << "Function: " << func->getName();
+        } else {
+            rawstr << *val;
+        }
         rawstr << SVFUtil::getSourceLoc(res->getValue());
     }
     return rawstr.str();
