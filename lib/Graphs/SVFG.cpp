@@ -897,12 +897,6 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
                     it != eit; it++)
                 rawstr << "MR_" << it->second->getMR()->getMRID() << "V_" << it->second->getSSAVersion() << ", ";
             rawstr << ")\n";
-			rawstr << "----- PAGNODE in ------\n";
-            for(PHISVFGNode::OPVers::const_iterator it = tphi->opVerBegin(), eit = tphi->opVerEnd();
-                    it != eit; it++)
-                rawstr << *it->second << ", \n";
-			rawstr << "----- /PAGNODE in ------\n";
-			rawstr << "Result: " << *tphi->getRes() << "\n";
 
             rawstr << mphi->getRes()->getMR()->dumpStr() << "\n";
 //            rawstr << getSourceLoc(&mphi->getBB()->back());
