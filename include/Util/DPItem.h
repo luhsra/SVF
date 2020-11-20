@@ -779,7 +779,7 @@ struct std::hash<SVF::CxtDPItem>
 {
     size_t operator()(const SVF::CxtDPItem &cdpi) const
     {
-        std::hash<std::pair<SVF::NodeID, SVF::ContextCond>> h;
+        SVF::pair_hash<std::pair<SVF::NodeID, SVF::ContextCond>> h;
         return h(std::make_pair(cdpi.getCurNodeID(), cdpi.getContexts()));
     }
 };

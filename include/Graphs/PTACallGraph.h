@@ -223,7 +223,7 @@ public:
     typedef Map<const SVFFunction*, PTACallGraphNode *> FunToCallGraphNodeMap;
     typedef Map<const CallBlockNode*, CallGraphEdgeSet> CallInstToCallGraphEdgesMap;
     typedef std::pair<const CallBlockNode*, const SVFFunction*> CallSitePair;
-    typedef Map<CallSitePair, CallSiteID> CallSiteToIdMap;
+    typedef Map<CallSitePair, CallSiteID, pair_hash<CallSitePair>> CallSiteToIdMap;
     typedef Map<CallSiteID, CallSitePair> IdToCallSiteMap;
     typedef Set<const SVFFunction*> FunctionSet;
     typedef OrderedMap<const CallBlockNode*, FunctionSet> CallEdgeMap;

@@ -48,6 +48,21 @@
 namespace SVF
 {
 
+/// Specialise hash for pairs.
+template <typename Pair> struct pair_hash {
+    // Pairing function from: http://szudzik.com/ElegantPairing.pdf
+    static size_t szudzik(size_t a, size_t b)
+    {
+        return a > b ? b * b + a : a * a + a + b;
+    }
+
+    size_t operator()(const Pair &p) const {
+        std::hash<decltype(p.first)> h1;
+        std::hash<decltype(p.second)> h2;
+        return szudzik(h1(p.first), h2(p.second));
+    }
+};
+
 typedef unsigned u32_t;
 typedef unsigned long long u64_t;
 typedef signed s32_t;
@@ -85,8 +100,8 @@ using SmallVector = llvm::SmallVector<T, N>;
 typedef std::pair<NodeID, NodeID> NodePair;
 typedef OrderedSet<NodeID> OrderedNodeSet;
 typedef Set<NodeID> NodeSet;
-typedef Set<NodePair> NodePairSet;
-typedef Map<NodePair,NodeID> NodePairMap;
+typedef Set<NodePair,pair_hash<NodePair>> NodePairSet;
+typedef Map<NodePair,NodeID,pair_hash<NodePair>> NodePairMap;
 typedef std::vector<NodeID> NodeVector;
 typedef std::vector<EdgeID> EdgeVector;
 typedef std::stack<NodeID> NodeStack;
@@ -207,24 +222,8 @@ public:
     }
 };
 
-
-
 } // End namespace SVF
 
-/// Specialise hash for pairs.
-template <typename T, typename U> struct std::hash<std::pair<T, U>> {
-    // Pairing function from: http://szudzik.com/ElegantPairing.pdf
-    static size_t szudzik(size_t a, size_t b)
-    {
-        return a > b ? b * b + a : a * a + a + b;
-    }
-
-    size_t operator()(const std::pair<T, U> &p) const {
-        std::hash<T> h1;
-        std::hash<U> h2;
-        return szudzik(h1(p.first), h2(p.second));
-    }
-};
 
 /// Specialise hash for SmallVectors.
 template <typename T, unsigned N>
@@ -236,7 +235,7 @@ struct std::hash<SVF::SmallVector<T, N>>
 
         // Iterate and accumulate the hash.
         size_t hash = 0;
-        std::hash<std::pair<T, size_t>> hts;
+        SVF::pair_hash<std::pair<T, size_t>> hts;
         std::hash<T> ht;
         for (const T &t : sv)
         {

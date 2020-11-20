@@ -700,7 +700,8 @@ void FlowSensitive::printCTirAliasStats(void)
     assert(dchg && "eval-ctir-aliases needs DCHG.");
 
     // < SVFG node ID (loc), PAG node of interest (top-level pointer) >.
-    Set<std::pair<NodeID, NodeID>> cmpLocs;
+    typedef std::pair<NodeID, NodeID> NodeIDPair;
+    Set<NodeIDPair,pair_hash<NodeIDPair>> cmpLocs;
     for (SVFG::iterator npair = svfg->begin(); npair != svfg->end(); ++npair)
     {
         NodeID loc = npair->first;
@@ -759,7 +760,7 @@ void FlowSensitive::printCTirAliasStats(void)
                  << "  " << "NO  % : " << 100 * ((double)noAliases/(double)(total)) << "\n";
 }
 
-void FlowSensitive::countAliases(Set<std::pair<NodeID, NodeID>> cmp, unsigned *mayAliases, unsigned *noAliases)
+void FlowSensitive::countAliases(Set<std::pair<NodeID, NodeID>, pair_hash<std::pair<NodeID, NodeID>>> cmp, unsigned *mayAliases, unsigned *noAliases)
 {
     for (std::pair<NodeID, NodeID> locPA : cmp)
     {

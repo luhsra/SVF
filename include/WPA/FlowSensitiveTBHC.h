@@ -93,7 +93,7 @@ public:
 protected:
     virtual void backPropagate(NodeID clone) override;
 
-    virtual void countAliases(Set<std::pair<NodeID, NodeID>> cmp, unsigned *mayAliases, unsigned *noAliases) override;
+    virtual void countAliases(Set<std::pair<NodeID, NodeID>, pair_hash<std::pair<NodeID, NodeID>>> cmp, unsigned *mayAliases, unsigned *noAliases) override;
 
 private:
     /// Determines whether each GEP is for a load or not. Builds gepIsLoad map.

@@ -657,9 +657,10 @@ void FlowSensitiveTBHC::expandFIObjs(const PointsTo& pts, PointsTo& expandedPts)
     }
 }
 
-void FlowSensitiveTBHC::countAliases(Set<std::pair<NodeID, NodeID>> cmp, unsigned *mayAliases, unsigned *noAliases)
+void FlowSensitiveTBHC::countAliases(Set<std::pair<NodeID, NodeID>, pair_hash<std::pair<NodeID, NodeID>>> cmp, unsigned *mayAliases, unsigned *noAliases)
 {
-    Map<std::pair<NodeID, NodeID>, PointsTo> filteredPts;
+    typedef std::pair<NodeID, NodeID> NodeIDPair;
+    Map<NodeIDPair, PointsTo, pair_hash<NodeIDPair>> filteredPts;
     for (std::pair<NodeID, NodeID> locP : cmp)
     {
         const PointsTo &filterSet = getFilterSet(locP.first);

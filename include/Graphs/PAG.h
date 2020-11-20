@@ -71,10 +71,10 @@ public:
     typedef Map<NodeID, NodeID> NodeToNodeMap;
     typedef std::pair<NodeID, Size_t> NodeOffset;
     typedef std::pair<NodeID, LocationSet> NodeLocationSet;
-    typedef Map<NodeOffset,NodeID> NodeOffsetMap;
-    typedef Map<NodeLocationSet,NodeID> NodeLocationSetMap;
+    typedef Map<NodeOffset,NodeID,pair_hash<NodeOffset>> NodeOffsetMap;
+    typedef Map<NodeLocationSet,NodeID,pair_hash<NodeLocationSet>> NodeLocationSetMap;
     typedef Map<const Value*, NodeLocationSetMap> GepValPNMap;
-    typedef Map<NodePair,NodeID> NodePairSetMap;
+    typedef Map<NodePair,NodeID,pair_hash<NodePair>> NodePairSetMap;
 
 private:
     SymbolTableInfo* symInfo;

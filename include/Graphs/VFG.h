@@ -58,7 +58,8 @@ public:
     typedef Map<NodeID, VFGNode *> VFGNodeIDToNodeMapTy;
     typedef Set<VFGNode*> VFGNodeSet;
     typedef Map<const PAGNode*, NodeID> PAGNodeToDefMapTy;
-    typedef Map<std::pair<NodeID,const CallBlockNode*>, ActualParmVFGNode *> PAGNodeToActualParmMapTy;
+    typedef std::pair<NodeID,const CallBlockNode*> NodeCBNPair;
+    typedef Map<NodeCBNPair, ActualParmVFGNode *, pair_hash<NodeCBNPair>> PAGNodeToActualParmMapTy;
     typedef Map<const PAGNode*, ActualRetVFGNode *> PAGNodeToActualRetMapTy;
     typedef Map<const PAGNode*, FormalParmVFGNode *> PAGNodeToFormalParmMapTy;
     typedef Map<const PAGNode*, FormalRetVFGNode *> PAGNodeToFormalRetMapTy;
