@@ -32,6 +32,9 @@
 #include "Graphs/SVFG.h"
 #include "Graphs/SVFGOPT.h"
 #include "Graphs/SVFGStat.h"
+#include "WPA/Andersen.h"
+
+#include <sstream>
 
 using namespace SVF;
 using namespace SVFUtil;
@@ -114,6 +117,13 @@ const std::string CallIndSVFGEdge::toString() const {
     raw_string_ostream rawstr(str);
     rawstr << "CallIndSVFGEdge CallSite ID: " << getCallSiteId() << " ";
     rawstr << getDstID() << "<--" << getSrcID() << "\n";
+
+    SVF::PAG* pag = SVF::PAG::getPAG();
+    SVF::Andersen* ander = SVF::AndersenWaveDiff::createAndersenWaveDiff(pag);
+    SVF::PTACallGraph* s_callgraph = ander->getPTACallGraph();
+    const SVF::CallBlockNode* cbn = s_callgraph->getCallSite(getCallSiteId());
+
+    rawstr << "\n(CallBlockNode " << *cbn << ")";
     return rawstr.str();
 }
 
@@ -815,6 +825,18 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
         return rawstr.str();
     }
 
+    static inline void pretty_print(const llvm::Value& val, llvm::raw_ostream& o) {
+        if (const llvm::Function* f = llvm::dyn_cast<llvm::Function>(&val)) {
+            o << "Func: " << f->getName();
+        } else {
+            std::string str;
+            raw_string_ostream rawstr(str);
+            rawstr << val;
+            auto s = rawstr.str();
+            o << s.substr(0, 40);
+        }
+    }
+
     /// Return label of a VFG node with MemSSA information
     static std::string getCompleteNodeLabel(NodeType *node, SVFG*)
     {
@@ -836,10 +858,14 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
                    << "\n";
             rawstr << "--- PAGNodes ---\n";
             if (s->hasValue()) {
-            	rawstr << "src: " << *s->getValue() << "\n";
+                rawstr << "src: ";
+                pretty_print(*s->getValue(), rawstr);
+                rawstr << "\n";
             }
             if (d->hasValue()) {
-            	rawstr << "dst: " << *d->getValue() << "\n";
+                rawstr << "dst: ";
+                pretty_print(*d->getValue(), rawstr);
+                rawstr << "\n";
             }
             rawstr << "--- /PAGNodes ---\n";
             if(stmtNode->getInst())
@@ -1105,25 +1131,27 @@ struct DOTGraphTraits<SVFG*> : public DOTGraphTraits<PAG*>
     {
         SVFGEdge* edge = *(EI.getCurrent());
         assert(edge && "No edge found!!");
+        std::stringstream ss;
         if (SVFUtil::isa<DirectSVFGEdge>(edge))
         {
             if (SVFUtil::isa<CallDirSVFGEdge>(edge))
-                return "style=solid,color=red";
+                ss << "style=solid,color=red";
             else if (SVFUtil::isa<RetDirSVFGEdge>(edge))
-                return "style=solid,color=blue";
+                ss << "style=solid,color=blue";
             else
-                return "style=solid";
+                ss << "style=solid";
         }
         else if (SVFUtil::isa<IndirectSVFGEdge>(edge))
         {
             if (SVFUtil::isa<CallIndSVFGEdge>(edge))
-                return "style=dashed,color=red";
+                ss << "style=dashed,color=red";
             else if (SVFUtil::isa<RetIndSVFGEdge>(edge))
-                return "style=dashed,color=blue";
+                ss << "style=dashed,color=blue";
             else
-                return "style=dashed";
+                ss << "style=dashed";
         }
-        return "";
+        ss << ",label=\"" << edge->toString() << '"';
+        return ss.str();
     }
 
     template<class EdgeIter>

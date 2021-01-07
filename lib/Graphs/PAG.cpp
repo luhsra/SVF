@@ -55,13 +55,26 @@ const std::string PAGNode::toString() const {
     return rawstr.str();
 }
 
+inline void pretty_print(const llvm::Value& val, llvm::raw_ostream& o) {
+    if (const llvm::Function* f = llvm::dyn_cast<llvm::Function>(&val)) {
+        o << "Func: " << f->getName();
+    } else {
+        std::string str;
+        raw_string_ostream rawstr(str);
+        rawstr << val;
+        auto s = rawstr.str();
+        o << s.substr(0, 40);
+    }
+}
+
 const std::string ValPN::toString() const {
     std::string str;
     raw_string_ostream rawstr(str);
     rawstr << "ValPN ID: " << getId();
     if(value){
-        rawstr << " " << *value << " ";
-        rawstr << getSourceLoc(value);
+        rawstr << " ";
+        pretty_print(*value, rawstr);
+        rawstr << " " << getSourceLoc(value);
     }
     return rawstr.str();
 }

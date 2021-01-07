@@ -31,6 +31,7 @@
 #include "Graphs/VFG.h"
 #include "Util/SVFModule.h"
 #include "SVF-FE/LLVMUtil.h"
+#include "WPA/Andersen.h"
 
 using namespace SVF;
 using namespace SVFUtil;
@@ -273,6 +274,14 @@ const std::string CallDirSVFGEdge::toString() const {
     raw_string_ostream rawstr(str);
     rawstr << "CallDirSVFGEdge CallSite ID: " << getCallSiteId() << " [";
     rawstr << getDstID() << "<--" << getSrcID() << "]\t";
+
+    SVF::PAG* pag = SVF::PAG::getPAG();
+    SVF::Andersen* ander = SVF::AndersenWaveDiff::createAndersenWaveDiff(pag);
+    SVF::PTACallGraph* s_callgraph = ander->getPTACallGraph();
+    const SVF::CallBlockNode* cbn = s_callgraph->getCallSite(getCallSiteId());
+
+    rawstr << "\n(CallBlockNode " << *cbn << ")";
+
     return rawstr.str();
 }
 
