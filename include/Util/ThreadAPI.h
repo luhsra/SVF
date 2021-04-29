@@ -119,11 +119,13 @@ public:
     //@{
     inline bool isTDFork(const Instruction *inst) const
     {
-        return getType(getCallee(inst)) == TD_FORK;
+        //return getType(getCallee(inst)) == TD_FORK;
+        return false;
     }
     inline bool isTDFork(CallSite cs) const
     {
-        return isTDFork(cs.getInstruction());
+        //return isTDFork(cs.getInstruction());
+        return false;
     }
     //@}
 
@@ -131,11 +133,13 @@ public:
     //@{
     inline bool isHareParFor(const Instruction *inst) const
     {
-        return getType(getCallee(inst)) == HARE_PAR_FOR;
+        //return getType(getCallee(inst)) == HARE_PAR_FOR;
+        return false;
     }
     inline bool isHareParFor(CallSite cs) const
     {
-        return isTDFork(cs.getInstruction());
+        //return isTDFork(cs.getInstruction());
+        return false;
     }
     //@}
 
@@ -213,11 +217,13 @@ public:
     //@{
     inline bool isTDJoin(const Instruction *inst) const
     {
-        return getType(getCallee(inst)) == TD_JOIN;
+        //return getType(getCallee(inst)) == TD_JOIN;
+        return false;
     }
     inline bool isTDJoin(CallSite cs) const
     {
-        return isTDJoin(cs.getInstruction());
+        //return isTDJoin(cs.getInstruction());
+        return false;
     }
     //@}
 
@@ -260,12 +266,14 @@ public:
     //@{
     inline bool isTDExit(const Instruction *inst) const
     {
-        return getType(getCallee(inst)) == TD_EXIT;
+        //return getType(getCallee(inst)) == TD_EXIT;
+        return false;
     }
 
     inline bool isTDExit(CallSite cs) const
     {
-        return getType(getCallee(cs)) == TD_EXIT;
+        //return getType(getCallee(cs)) == TD_EXIT;
+        return false;
     }
     //@}
 
@@ -273,12 +281,14 @@ public:
     //@{
     inline bool isTDAcquire(const Instruction *inst) const
     {
-        return getType(getCallee(inst)) == TD_ACQUIRE;
+        //return getType(getCallee(inst)) == TD_ACQUIRE;
+        return false;
     }
 
     inline bool isTDAcquire(CallSite cs) const
     {
-        return getType(getCallee(cs)) == TD_ACQUIRE;
+        //return getType(getCallee(cs)) == TD_ACQUIRE;
+        return false;
     }
     //@}
 
@@ -286,12 +296,14 @@ public:
     //@{
     inline bool isTDRelease(const Instruction *inst) const
     {
-        return getType(getCallee(inst)) == TD_RELEASE;
+        //return getType(getCallee(inst)) == TD_RELEASE;
+        return false;
     }
 
     inline bool isTDRelease(CallSite cs) const
     {
-        return getType(getCallee(cs)) == TD_RELEASE;
+        //return getType(getCallee(cs)) == TD_RELEASE;
+        return false;
     }
     //@}
 
@@ -314,12 +326,14 @@ public:
     //@{
     inline bool isTDBarWait(const Instruction *inst) const
     {
-        return getType(getCallee(inst)) == TD_BAR_WAIT;
+        //return getType(getCallee(inst)) == TD_BAR_WAIT;
+        return false;
     }
 
     inline bool isTDBarWait(CallSite cs) const
     {
-        return getType(getCallee(cs)) == TD_BAR_WAIT;
+        //return getType(getCallee(cs)) == TD_BAR_WAIT;
+        return false;
     }
     //@}
 
