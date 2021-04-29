@@ -318,7 +318,7 @@ namespace SVF
 
     const llvm::cl::opt<bool> Options::EnableThreadCallGraph(
         "enable-tcg", 
-        llvm::cl::init(true),
+        llvm::cl::init(false),
         llvm::cl::desc("Enable pointer analysis to use thread call graph")
     );
 
